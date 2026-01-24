@@ -5,6 +5,8 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IncomeExpenseSystemDataAccess", "IncomeExpenseSystemDataAccess\IncomeExpenseSystemDataAccess.csproj", "{5820216F-EB64-47B0-9A37-0EDA1EE326A5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IncomeExpenseSystemApi", "IncomeExpenseSystemApi\IncomeExpenseSystemApi.csproj", "{3E1A2ECA-E7F2-43B8-9383-9F467D232809}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{5820216F-EB64-47B0-9A37-0EDA1EE326A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5820216F-EB64-47B0-9A37-0EDA1EE326A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5820216F-EB64-47B0-9A37-0EDA1EE326A5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E1A2ECA-E7F2-43B8-9383-9F467D232809}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E1A2ECA-E7F2-43B8-9383-9F467D232809}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E1A2ECA-E7F2-43B8-9383-9F467D232809}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E1A2ECA-E7F2-43B8-9383-9F467D232809}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
