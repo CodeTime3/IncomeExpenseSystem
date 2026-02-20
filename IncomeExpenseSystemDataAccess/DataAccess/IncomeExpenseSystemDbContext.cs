@@ -8,15 +8,18 @@ public class IncomeExpenseSystemDbContext : DbContext
 {
     public IncomeExpenseSystemDbContext(DbContextOptions<IncomeExpenseSystemDbContext> options) : base(options)
     {
-        
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.ApplyConfiguration(new ExpenseConfiguration());
+        modelBuilder.ApplyConfiguration(new TransactionConfiguration());
+        modelBuilder.ApplyConfiguration(new UserConfiguration());
+        modelBuilder.ApplyConfiguration(new CategoryConfiguration());
         
         base.OnModelCreating(modelBuilder);
     }
 
-    public DbSet<Expense> Expenses { get; set; }
+    public DbSet<Transaction> Expenses { get; set; }
+    public DbSet<User> Users { get; set; }
+    public DbSet<Category> Categories { get; set; }
 }
