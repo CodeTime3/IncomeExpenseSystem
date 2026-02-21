@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IncomeExpenseSystemDataAcce
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IncomeExpenseSystemApi", "IncomeExpenseSystemApi\IncomeExpenseSystemApi.csproj", "{3E1A2ECA-E7F2-43B8-9383-9F467D232809}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IncomeExpenseSystemTest", "IncomeExpenseSystemTest\IncomeExpenseSystemTest.csproj", "{C94EE463-2E8B-4050-A959-E15C279B6AEE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{3E1A2ECA-E7F2-43B8-9383-9F467D232809}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3E1A2ECA-E7F2-43B8-9383-9F467D232809}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3E1A2ECA-E7F2-43B8-9383-9F467D232809}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C94EE463-2E8B-4050-A959-E15C279B6AEE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C94EE463-2E8B-4050-A959-E15C279B6AEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C94EE463-2E8B-4050-A959-E15C279B6AEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C94EE463-2E8B-4050-A959-E15C279B6AEE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
