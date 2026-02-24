@@ -3,6 +3,7 @@ using System;
 using IncomeExpenseSystemDataAccess.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IncomeExpenseSystemDataAccess.Migrations
 {
     [DbContext(typeof(IncomeExpenseSystemDbContext))]
-    partial class IncomeExpenseSystemDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260224192831_AddedFkUserIdOnCategoryAndAddedSystemCategory")]
+    partial class AddedFkUserIdOnCategoryAndAddedSystemCategory
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
