@@ -36,5 +36,9 @@ public class TransactionConfiguration : IEntityTypeConfiguration<Transaction>
         builder.HasOne(e => e.Category)
             .WithMany(e => e.Transactions)
             .HasForeignKey(e => e.CategoryId);
+        
+        builder.HasOne(e => e.SystemCategory)
+            .WithMany(e => e.Transactions)
+            .HasForeignKey(e => e.SystemCategoryId);
     }
 }
