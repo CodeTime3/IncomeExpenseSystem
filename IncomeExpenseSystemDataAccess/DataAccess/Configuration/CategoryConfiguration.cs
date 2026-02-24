@@ -21,5 +21,9 @@ public class CategoryConfiguration : IEntityTypeConfiguration<Category>
             .WithOne(e => e.Category)
             .HasForeignKey(e => e.CategoryId)
             .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasOne(e => e.User)
+            .WithMany(e => e.Categories)
+            .HasForeignKey(e => e.UserId);
     }
 }
