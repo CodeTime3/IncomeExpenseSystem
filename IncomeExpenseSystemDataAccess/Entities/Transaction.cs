@@ -11,4 +11,6 @@ public class Transaction
     public User User { get; set; }
     public Guid CategoryId { get; set; }
     public Category Category { get; set; }
+    public Guid SystemCategoryId { get; set; }
+    public SystemCategory SystemCategory { get; set; }
 }
