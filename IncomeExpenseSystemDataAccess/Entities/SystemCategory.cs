@@ -1,4 +1,4 @@
-namespace IncomeExpenseSystemDataAccess.Models;
+namespace IncomeExpenseSystemDataAccess.Entities;
 
 public class SystemCategory
 {

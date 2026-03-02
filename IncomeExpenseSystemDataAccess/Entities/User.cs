@@ -1,4 +1,4 @@
-namespace IncomeExpenseSystemDataAccess.Models;
+namespace IncomeExpenseSystemDataAccess.Entities;
 
 public class User
 {
@@ -7,4 +7,10 @@ public class User
     public string UserPassword { get; set; }
     public ICollection<Transaction> Transactions { get; set; }
     public ICollection<Category> Categories { get; set; }
+
+    public User(string userMail, string userPassword)
+    {
+        UserMail = userMail;
+        UserPassword = userPassword;
+    }
 }

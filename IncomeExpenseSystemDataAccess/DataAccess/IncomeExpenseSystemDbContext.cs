@@ -1,5 +1,5 @@
 using IncomeExpenseSystemDataAccess.DataAccess.Configuration;
-using IncomeExpenseSystemDataAccess.Models;
+using IncomeExpenseSystemDataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace IncomeExpenseSystemDataAccess.DataAccess;

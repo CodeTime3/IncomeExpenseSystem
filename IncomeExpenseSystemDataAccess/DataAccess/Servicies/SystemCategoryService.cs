@@ -1,4 +1,4 @@
-using IncomeExpenseSystemDataAccess.Models;
+using IncomeExpenseSystemDataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace IncomeExpenseSystemDataAccess.DataAccess.Servicies;
