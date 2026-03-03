@@ -8,8 +8,17 @@ public class User
     public ICollection<Transaction> Transactions { get; set; }
     public ICollection<Category> Categories { get; set; }
 
+    public User() {}
+    
     public User(string userMail, string userPassword)
     {
+        UserMail = userMail;
+        UserPassword = userPassword;
+    }
+
+    public User(Guid userId, string userMail, string userPassword)
+    {
+        UserId = userId;
         UserMail = userMail;
         UserPassword = userPassword;
     }
