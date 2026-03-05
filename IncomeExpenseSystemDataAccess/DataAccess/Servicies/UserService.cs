@@ -41,7 +41,7 @@ public class UserService
     }
 
     public async Task DeleteUser(User user) 
-    {//TODO: vedere i log
+    {
         
         _dbContext.Remove(user);
         await _dbContext.SaveChangesAsync();   

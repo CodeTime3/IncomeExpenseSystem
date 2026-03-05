@@ -45,7 +45,7 @@ public class CategoryService
     }
 
     public async Task DeleteCategory(Category category)
-    {//TODO: vedere per i log
+    {
 
         _dbContext.Remove(category);
         await _dbContext.SaveChangesAsync();

@@ -13,4 +13,29 @@ public class Transaction
     public Category Category { get; set; }
     public Guid SystemCategoryId { get; set; }
     public SystemCategory SystemCategory { get; set; }
+    
+    public Transaction() {}
+
+    public Transaction(decimal transactionAmount, string transactionDescription, DateTime transactionDate, TransactionType transactionType, Guid userId, Guid categoryId, Guid systemCategoryId)
+    {
+        TransactionAmount = transactionAmount;
+        TransactionDescription = transactionDescription;
+        TransactionDate = transactionDate;
+        TransactionType = transactionType;
+        UserId = userId;
+        CategoryId = categoryId;
+        SystemCategoryId = systemCategoryId;
+    }
+    
+    public Transaction(Guid transactionId, decimal transactionAmount, string transactionDescription, DateTime transactionDate, TransactionType transactionType, Guid userId, Guid categoryId, Guid systemCategoryId)
+    {
+        TransactionId = transactionId;
+        TransactionAmount = transactionAmount;
+        TransactionDescription = transactionDescription;
+        TransactionDate = transactionDate;
+        TransactionType = transactionType;
+        UserId = userId;
+        CategoryId = categoryId;
+        SystemCategoryId = systemCategoryId;
+    }
 }
