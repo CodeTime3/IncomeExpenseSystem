@@ -6,4 +6,14 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="MailKit" Version="4.15.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\IncomeExpenseSystemDataAccess\IncomeExpenseSystemDataAccess.csproj" />
+    <ProjectReference Include="..\IncomeExpenseSystemModels\IncomeExpenseSystemModels.csproj" />
+  </ItemGroup>
+
 </Project>
