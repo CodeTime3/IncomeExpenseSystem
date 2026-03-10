@@ -7,7 +7,9 @@ public class User
     public string UserPassword { get; set; }
     public ICollection<Transaction> Transactions { get; set; }
     public ICollection<Category> Categories { get; set; }
-
+    public DateTime? UserMailVerifiedAt { get; set; }
+    public DateTime UserCreatedAt { get; set; }
+    
     public User() {}
     
     public User(string userMail, string userPassword)
