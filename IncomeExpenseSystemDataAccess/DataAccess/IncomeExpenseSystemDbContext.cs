@@ -16,6 +16,7 @@ public class IncomeExpenseSystemDbContext : DbContext
         modelBuilder.ApplyConfiguration(new UserConfiguration());
         modelBuilder.ApplyConfiguration(new CategoryConfiguration());
         modelBuilder.ApplyConfiguration(new SystemCategoryConfiguration());
+        modelBuilder.ApplyConfiguration(new EmailVerificationConfiguration());
         
         base.OnModelCreating(modelBuilder);
     }
@@ -24,4 +25,5 @@ public class IncomeExpenseSystemDbContext : DbContext
     public DbSet<User> Users { get; set; }
     public DbSet<Category> Categories { get; set; }
     public DbSet<SystemCategory> SystemCategories { get; set; }
+    public  DbSet<EmailVerification> EmailVerifications { get; set; }
 }

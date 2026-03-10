@@ -3,6 +3,7 @@ using System;
 using IncomeExpenseSystemDataAccess.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IncomeExpenseSystemDataAccess.Migrations
 {
     [DbContext(typeof(IncomeExpenseSystemDbContext))]
-    partial class IncomeExpenseSystemDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260310201547_AddedEmailVerification")]
+    partial class AddedEmailVerification
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -38,33 +41,6 @@ namespace IncomeExpenseSystemDataAccess.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Categories", (string)null);
-                });
-
-            modelBuilder.Entity("IncomeExpenseSystemDataAccess.Entities.EmailVerification", b =>
-                {
-                    b.Property<Guid>("EmailVerificationId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
-
-                    b.Property<DateTime>("EmailVerificationExpiresAt")
-                        .HasColumnType("datetime");
-
-                    b.Property<string>("EmailVerificationToken")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<DateTime?>("EmailVerifiedAt")
-                        .HasColumnType("datetime");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("char(36)");
-
-                    b.HasKey("EmailVerificationId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("EmailVerifications", (string)null);
                 });
 
             modelBuilder.Entity("IncomeExpenseSystemDataAccess.Entities.SystemCategory", b =>
@@ -157,17 +133,6 @@ namespace IncomeExpenseSystemDataAccess.Migrations
                 {
                     b.HasOne("IncomeExpenseSystemDataAccess.Entities.User", "User")
                         .WithMany("Categories")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("IncomeExpenseSystemDataAccess.Entities.EmailVerification", b =>
-                {
-                    b.HasOne("IncomeExpenseSystemDataAccess.Entities.User", "User")
-                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

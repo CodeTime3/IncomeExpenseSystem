@@ -33,5 +33,12 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             .WithOne(x => x.User)
             .HasForeignKey(x => x.UserId)
             .OnDelete(DeleteBehavior.Cascade);
+        
+        builder.Property(x => x.UserMailVerifiedAt)
+            .HasColumnType("datetime");
+        
+        builder.Property(x => x.UserCreatedAt)
+            .HasColumnType("datetime")
+            .IsRequired();
     }
 }
