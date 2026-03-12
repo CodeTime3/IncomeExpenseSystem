@@ -22,7 +22,9 @@ public class UserServiceTest
         (
             Guid.Parse("532b2bfa-87ae-435a-b91b-76297442ac38"), 
             "daniele.pilloni@gmail.com", 
-            "Password"
+            "Password",
+            null,
+            DateTime.Now
         );
         userService = new UserService(context);
         
@@ -66,13 +68,15 @@ public class UserServiceTest
         (
             Guid.Parse("532b2bfa-87ae-435a-b91b-76297442ac38"), 
             "daniele.pilloni@gmail.com", 
-            "password"
+            "password",
+            DateTime.Now,
+            DateTime.Now
         );
         
         var userDb = await userService.UpdateUser(user);
         
         Assert.Equal("daniele.pilloni@gmail.com", userDb.UserMail);
-        Assert.Equal("Password", userDb.UserPassword);
+        Assert.Equal("password", userDb.UserPassword);
     }
 
     [Fact]
