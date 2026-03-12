@@ -8,4 +8,22 @@ public class EmailVerification
     public DateTime? EmailVerifiedAt { get; set; }
     public Guid UserId { get; set; }
     public User User { get; set; }
+    
+    public EmailVerification() {}
+    
+    public EmailVerification(string emailVerificationToken, DateTime emailVerificationExpiresAt, Guid userId)
+    {
+        EmailVerificationToken = emailVerificationToken;
+        EmailVerificationExpiresAt = emailVerificationExpiresAt;
+        UserId = userId;
+    }
+    
+    public EmailVerification(Guid emailVerificationId, string emailVerificationToken, DateTime emailVerificationExpiresAt, DateTime? emailVerifiedAt, Guid userId)
+    {
+        EmailVerificationId = emailVerificationId;
+        EmailVerificationToken = emailVerificationToken;
+        EmailVerificationExpiresAt = emailVerificationExpiresAt;
+        EmailVerifiedAt = emailVerifiedAt;
+        UserId = userId;
+    }
 }

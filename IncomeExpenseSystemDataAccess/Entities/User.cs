@@ -12,16 +12,19 @@ public class User
     
     public User() {}
     
-    public User(string userMail, string userPassword)
+    public User(string userMail, string userPassword, DateTime userCreatedAt)
     {
         UserMail = userMail;
         UserPassword = userPassword;
+        UserCreatedAt = userCreatedAt;
     }
 
-    public User(Guid userId, string userMail, string userPassword)
+    public User(Guid userId, string userMail, string userPassword, DateTime? userMailVerifiedAt, DateTime userCreatedAt)
     {
         UserId = userId;
         UserMail = userMail;
         UserPassword = userPassword;
+        UserMailVerifiedAt = userMailVerifiedAt;
+        UserCreatedAt = userCreatedAt;
     }
 }
