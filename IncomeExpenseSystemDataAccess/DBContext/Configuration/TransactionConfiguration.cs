@@ -1,8 +1,8 @@
-using IncomeExpenseSystemDataAccess.Entities;
+using IncomeExpenseSystemDomain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace IncomeExpenseSystemDataAccess.DataAccess.Configuration;
+namespace IncomeExpenseSystemDataAccess.DBContext.Configuration;
 
 public class TransactionConfiguration : IEntityTypeConfiguration<Transaction>
 {

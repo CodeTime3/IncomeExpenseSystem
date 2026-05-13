@@ -1,8 +1,9 @@
-using IncomeExpenseSystemDataAccess.DataAccess.Configuration;
-using IncomeExpenseSystemDataAccess.Entities;
+using IncomeExpenseSystemDataAccess.DBContext;
+using IncomeExpenseSystemDataAccess.DBContext.Configuration;
+using IncomeExpenseSystemDomain.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace IncomeExpenseSystemDataAccess.DataAccess;
+namespace IncomeExpenseSystemDataAccess.DBContext;
 
 public class IncomeExpenseSystemDbContext : DbContext
 {
