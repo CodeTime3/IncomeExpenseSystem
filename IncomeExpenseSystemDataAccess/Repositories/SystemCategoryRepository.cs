@@ -1,13 +1,15 @@
-using IncomeExpenseSystemDataAccess.Entities;
+using IncomeExpenseSystemDataAccess.DBContext;
+using IncomeExpenseSystemDomain.Entities;
+using IncomeExpenseSystemDomain.Repositories;
 using Microsoft.EntityFrameworkCore;
 
-namespace IncomeExpenseSystemDataAccess.DataAccess.Servicies;
+namespace IncomeExpenseSystemDataAccess.Repositories;
 
-public class SystemCategoryService
+public class SystemCategoryRepository : ISystemCategoryRepository
 {
     private readonly IncomeExpenseSystemDbContext _dbContext;
     
-    public SystemCategoryService(IncomeExpenseSystemDbContext dbContext)
+    public SystemCategoryRepository(IncomeExpenseSystemDbContext dbContext)
     {
         _dbContext = dbContext;
     }

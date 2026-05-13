@@ -1,13 +1,15 @@
-using IncomeExpenseSystemDataAccess.Entities;
+using IncomeExpenseSystemDataAccess.DBContext;
+using IncomeExpenseSystemDomain.Entities;
+using IncomeExpenseSystemDomain.Repositories;
 using Microsoft.EntityFrameworkCore;
 
-namespace IncomeExpenseSystemDataAccess.DataAccess.Servicies;
+namespace IncomeExpenseSystemDataAccess.Repositories;
 
-public class TransactionService
+public class TransactionRepository : ITransactionRepository
 {
     private readonly IncomeExpenseSystemDbContext _dbContext;
     
-    public TransactionService(IncomeExpenseSystemDbContext dbContext)
+    public TransactionRepository(IncomeExpenseSystemDbContext dbContext)
     {
         _dbContext = dbContext;
     }

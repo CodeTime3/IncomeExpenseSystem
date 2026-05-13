@@ -1,13 +1,15 @@
-using IncomeExpenseSystemDataAccess.Entities;
+using IncomeExpenseSystemDataAccess.DBContext;
+using IncomeExpenseSystemDomain.Entities;
+using IncomeExpenseSystemDomain.Repositories;
 using Microsoft.EntityFrameworkCore;
 
-namespace IncomeExpenseSystemDataAccess.DataAccess.Servicies;
+namespace IncomeExpenseSystemDataAccess.Repositories;
 
-public class UserService
+public class UserRepository : IUserRepository
 {
     private readonly IncomeExpenseSystemDbContext _dbContext;
 
-    public UserService(IncomeExpenseSystemDbContext dbContext)
+    public UserRepository(IncomeExpenseSystemDbContext dbContext)
     {
         _dbContext = dbContext;
     }
@@ -40,7 +42,7 @@ public class UserService
         return user;
     }
 
-    public async Task DeleteUser(User user) 
+    public async Task DeleteUser(User user)
     {
         
         _dbContext.Remove(user);

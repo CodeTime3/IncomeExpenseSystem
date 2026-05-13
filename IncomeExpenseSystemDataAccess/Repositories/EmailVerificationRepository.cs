@@ -1,13 +1,15 @@
-using IncomeExpenseSystemDataAccess.Entities;
+using IncomeExpenseSystemDataAccess.DBContext;
+using IncomeExpenseSystemDomain.Entities;
+using IncomeExpenseSystemDomain.Repositories;
 using Microsoft.EntityFrameworkCore;
 
-namespace IncomeExpenseSystemDataAccess.DataAccess.Servicies;
+namespace IncomeExpenseSystemDataAccess.Repositories;
 
-public class EmailVerificationService
+public class EmailVerificationRepository : IEmailVerificationRepository
 {
     private readonly IncomeExpenseSystemDbContext _dbContext;
 
-    public EmailVerificationService(IncomeExpenseSystemDbContext dbContext)
+    public EmailVerificationRepository(IncomeExpenseSystemDbContext dbContext)
     {
         _dbContext = dbContext;
     }
@@ -44,7 +46,7 @@ public class EmailVerificationService
         return emailVerification;
     }
 
-    public async Task DeleteEmailVerification(EmailVerification emailVerification) 
+    public async Task DeleteEmailVerification(EmailVerification emailVerification)
     {
         _dbContext.Remove(emailVerification);
         await _dbContext.SaveChangesAsync();   
