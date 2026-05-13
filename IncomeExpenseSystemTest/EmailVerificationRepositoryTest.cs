@@ -1,18 +1,19 @@
-using IncomeExpenseSystemDataAccess.DataAccess;
-using IncomeExpenseSystemDataAccess.DataAccess.Servicies;
-using IncomeExpenseSystemDataAccess.Entities;
+using IncomeExpenseSystemDataAccess.DBContext;
+using IncomeExpenseSystemDataAccess.Repositories;
+using IncomeExpenseSystemDomain.Entities;
+using IncomeExpenseSystemDomain.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace IncomeExpenseSystemTest;
 
-public class EmailVerificationServiceTest
+public class EmailVerificationRepositoryTest
 {
     DbContextOptions<IncomeExpenseSystemDbContext> options = new DbContextOptionsBuilder<IncomeExpenseSystemDbContext>()
         .UseMySQL("server=localhost;uid=Daniele;pwd=CT22d03p06;database=IncomeExpenseSystem")
         .Options;
 
     private EmailVerification emailVerification;
-    private EmailVerificationService emailVerificationService;
+    private IEmailVerificationRepository _emailVerificationRepository;
     
     [Fact]
     public async Task CreateEmailVerification_should_work()
@@ -26,9 +27,9 @@ public class EmailVerificationServiceTest
             DateTime.Now,
             Guid.Parse("532b2bfa-87ae-435a-b91b-76297442ac38")
         );
-        emailVerificationService = new EmailVerificationService(context);
+        _emailVerificationRepository = new EmailVerificationRepository(context);
         
-        var emailVerificationDb = await emailVerificationService.CreateEmailVerification(emailVerification);
+        var emailVerificationDb = await _emailVerificationRepository.CreateEmailVerification(emailVerification);
         
         Assert.Equal("532b2bfa-87ae-435a-b91b-76297442ac49", emailVerificationDb.EmailVerificationToken);
     }
@@ -37,10 +38,10 @@ public class EmailVerificationServiceTest
     public async Task GetEmailVerificationById_should_work()
     {
         await using var context = new IncomeExpenseSystemDbContext(options);
-        emailVerificationService = new EmailVerificationService(context);
+        _emailVerificationRepository = new EmailVerificationRepository(context);
 
         var emailVerificationId = Guid.Parse("532b2bfa-87ae-592b-b91b-76297442ac38");
-        var emailVerificationDb = await emailVerificationService.GetEmailVerificationById(emailVerificationId);
+        var emailVerificationDb = await _emailVerificationRepository.GetEmailVerificationById(emailVerificationId);
         
         Assert.Equal("532b2bfa-87ae-435a-b91b-76297442ac49", emailVerificationDb.EmailVerificationToken);
     }
@@ -49,10 +50,10 @@ public class EmailVerificationServiceTest
     public async Task GetEmailVerificationsByUserId_should_work()
     {
         await using var context = new IncomeExpenseSystemDbContext(options);
-        emailVerificationService = new EmailVerificationService(context);
+        _emailVerificationRepository = new EmailVerificationRepository(context);
 
         var userId = Guid.Parse("532b2bfa-87ae-435a-b91b-76297442ac38");
-        var emailVerificationsDb = await emailVerificationService.GetEmailVerificationsByUserId(userId);
+        var emailVerificationsDb = await _emailVerificationRepository.GetEmailVerificationsByUserId(userId);
         
         Assert.Single(emailVerificationsDb);
     }
@@ -61,7 +62,7 @@ public class EmailVerificationServiceTest
     public async Task UpdateEmailVerification_should_work()
     {
         await using var context = new IncomeExpenseSystemDbContext(options);
-        emailVerificationService = new EmailVerificationService(context);
+        _emailVerificationRepository = new EmailVerificationRepository(context);
         emailVerification = new EmailVerification
         (
             Guid.Parse("532b2bfa-87ae-592b-b91b-76297442ac38"),
@@ -71,7 +72,7 @@ public class EmailVerificationServiceTest
             Guid.Parse("532b2bfa-87ae-435a-b91b-76297442ac38")
         );
         
-        var emailVerificationDb = await emailVerificationService.UpdateEmailVerification(emailVerification);
+        var emailVerificationDb = await _emailVerificationRepository.UpdateEmailVerification(emailVerification);
         
         Assert.Equal(DateTime.Now, emailVerificationDb.EmailVerificationExpiresAt);
     }
@@ -80,12 +81,12 @@ public class EmailVerificationServiceTest
     public async Task DeleteEmailVerification_should_work()
     {
         await using var context = new IncomeExpenseSystemDbContext(options);
-        emailVerificationService = new EmailVerificationService(context);
+        _emailVerificationRepository = new EmailVerificationRepository(context);
         
         var emailVerificationId = Guid.Parse("532b2bfa-87ae-592b-b91b-76297442ac38");
-        var emailVerificationDb = await emailVerificationService.GetEmailVerificationById(emailVerificationId);
+        var emailVerificationDb = await _emailVerificationRepository.GetEmailVerificationById(emailVerificationId);
         
-        await emailVerificationService.DeleteEmailVerification(emailVerificationDb);
+        await _emailVerificationRepository.DeleteEmailVerification(emailVerificationDb);
         
         var emailVerifications = await context.EmailVerifications.ToArrayAsync();
         

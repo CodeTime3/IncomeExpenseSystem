@@ -1,18 +1,19 @@
-using IncomeExpenseSystemDataAccess.DataAccess;
-using IncomeExpenseSystemDataAccess.DataAccess.Servicies;
-using IncomeExpenseSystemDataAccess.Entities;
+using IncomeExpenseSystemDataAccess.DBContext;
+using IncomeExpenseSystemDataAccess.Repositories;
+using IncomeExpenseSystemDomain.Entities;
+using IncomeExpenseSystemDomain.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace IncomeExpenseSystemTest;
 
-public class UserServiceTest
+public class UserRepositoryTest
 {
     DbContextOptions<IncomeExpenseSystemDbContext> options = new DbContextOptionsBuilder<IncomeExpenseSystemDbContext>()
         .UseMySQL("server=localhost;uid=Daniele;pwd=CT22d03p06;database=IncomeExpenseSystem")
         .Options;
 
     private User user;
-    private UserService userService;
+    private IUserRepository userRepository;
     
     [Fact]
     public async Task CreateUser_should_work()
@@ -26,9 +27,9 @@ public class UserServiceTest
             null,
             DateTime.Now
         );
-        userService = new UserService(context);
+        userRepository = new UserRepository(context);
         
-        var userDb = await userService.CreateUser(user);
+        var userDb = await userRepository.CreateUser(user);
         
         Assert.Equal("daniele.pilloni@gmail.com", userDb.UserMail);
         Assert.Equal("Password", userDb.UserPassword);
@@ -38,9 +39,9 @@ public class UserServiceTest
     public async Task GetAllUsers_should_work()
     {
         await using var context = new IncomeExpenseSystemDbContext(options);
-        userService = new UserService(context);
+        userRepository = new UserRepository(context);
         
-        var users = await userService.GetAllUsers();
+        var users = await userRepository.GetAllUsers();
         
         Assert.NotNull(users);
         Assert.Single(users);
@@ -50,10 +51,10 @@ public class UserServiceTest
     public async Task GetUserById_should_work()
     {
         await using var context = new IncomeExpenseSystemDbContext(options);
-        userService = new UserService(context);
+        userRepository = new UserRepository(context);
 
         var userId = Guid.Parse("532b2bfa-87ae-435a-b91b-76297442ac38");
-        var userDb = await userService.GetUserById(userId);
+        var userDb = await userRepository.GetUserById(userId);
         
         Assert.Equal("daniele.pilloni@gmail.com", userDb.UserMail);
         Assert.Equal("Password", userDb.UserPassword);
@@ -63,7 +64,7 @@ public class UserServiceTest
     public async Task UpdateUser_should_work()
     {
         await using var context = new IncomeExpenseSystemDbContext(options);
-        userService = new UserService(context);
+        userRepository = new UserRepository(context);
         user = new User
         (
             Guid.Parse("532b2bfa-87ae-435a-b91b-76297442ac38"), 
@@ -73,7 +74,7 @@ public class UserServiceTest
             DateTime.Now
         );
         
-        var userDb = await userService.UpdateUser(user);
+        var userDb = await userRepository.UpdateUser(user);
         
         Assert.Equal("daniele.pilloni@gmail.com", userDb.UserMail);
         Assert.Equal("password", userDb.UserPassword);
@@ -83,12 +84,12 @@ public class UserServiceTest
     public async Task DeleteUser_should_work()
     {
         await using var context = new IncomeExpenseSystemDbContext(options);
-        userService = new UserService(context);
+        userRepository = new UserRepository(context);
         
         var userId = Guid.Parse("532b2bfa-87ae-435a-b91b-76297442ac38");
-        var userDb = await userService.GetUserById(userId);
+        var userDb = await userRepository.GetUserById(userId);
         
-        await userService.DeleteUser(userDb);
+        await userRepository.DeleteUser(userDb);
         
         var users = await context.Users.ToArrayAsync();
         

@@ -1,18 +1,19 @@
-using IncomeExpenseSystemDataAccess.DataAccess;
-using IncomeExpenseSystemDataAccess.DataAccess.Servicies;
-using IncomeExpenseSystemDataAccess.Entities;
+using IncomeExpenseSystemDataAccess.DBContext;
+using IncomeExpenseSystemDataAccess.Repositories;
+using IncomeExpenseSystemDomain.Entities;
+using IncomeExpenseSystemDomain.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace IncomeExpenseSystemTest;
 
-public class SystemCategoryServiceTest
+public class SystemCategoryRepositoryTest
 {
     DbContextOptions<IncomeExpenseSystemDbContext> options = new DbContextOptionsBuilder<IncomeExpenseSystemDbContext>()
         .UseMySQL("server=localhost;uid=Daniele;pwd=CT22d03p06;database=IncomeExpenseSystem")
         .Options;
 
     private SystemCategory systemCategory;
-    private SystemCategoryService systemCategoryService;
+    private ISystemCategoryRepository _systemCategoryRepository;
     
     [Fact]
     public async Task CreateSystemCategory_should_work()
@@ -23,9 +24,9 @@ public class SystemCategoryServiceTest
             Guid.Parse("656b9ad3-0e4a-4199-aa35-f38febf68dba"), 
             "Test"
         );
-        systemCategoryService = new SystemCategoryService(context);
+        _systemCategoryRepository = new SystemCategoryRepository(context);
         
-        var systemCategoryDb = await systemCategoryService.CreateSystemCategory(systemCategory);
+        var systemCategoryDb = await _systemCategoryRepository.CreateSystemCategory(systemCategory);
         
         Assert.Equal("Test", systemCategoryDb.SystemCategoryName);
     }
@@ -34,9 +35,9 @@ public class SystemCategoryServiceTest
     public async Task GetAllSystemCategory_should_work()
     {
         await using var context = new IncomeExpenseSystemDbContext(options);
-        systemCategoryService = new SystemCategoryService(context);
+        _systemCategoryRepository = new SystemCategoryRepository(context);
         
-        var systemCategories = await systemCategoryService.GetAllSystemCategory();
+        var systemCategories = await _systemCategoryRepository.GetAllSystemCategory();
         
         Assert.NotNull(systemCategories);
         Assert.Single(systemCategories);
@@ -46,10 +47,10 @@ public class SystemCategoryServiceTest
     public async Task GetSystemCategoryById_should_work()
     {
         await using var context = new IncomeExpenseSystemDbContext(options);
-        systemCategoryService = new SystemCategoryService(context);
+        _systemCategoryRepository = new SystemCategoryRepository(context);
 
         var systemCategoryId = Guid.Parse("656b9ad3-0e4a-4199-aa35-f38febf68dba");
-        var systemCategoryDb = await systemCategoryService.GetSystemCategoryById(systemCategoryId);
+        var systemCategoryDb = await _systemCategoryRepository.GetSystemCategoryById(systemCategoryId);
         
         Assert.Equal("Test", systemCategoryDb.SystemCategoryName);
     }
@@ -58,14 +59,14 @@ public class SystemCategoryServiceTest
     public async Task UpdateSystemCategory_should_work()
     {
         await using var context = new IncomeExpenseSystemDbContext(options);
-        systemCategoryService = new SystemCategoryService(context);
+        _systemCategoryRepository = new SystemCategoryRepository(context);
         systemCategory = new SystemCategory
         (
             Guid.Parse("656b9ad3-0e4a-4199-aa35-f38febf68dba"), 
             "test"
         );
         
-        var systemCategoryDb = await systemCategoryService.UpdateSystemCategory(systemCategory);
+        var systemCategoryDb = await _systemCategoryRepository.UpdateSystemCategory(systemCategory);
         
         Assert.Equal("test", systemCategoryDb.SystemCategoryName);
     }
@@ -74,12 +75,12 @@ public class SystemCategoryServiceTest
     public async Task DeleteSystemCategory_should_work()
     {
         await using var context = new IncomeExpenseSystemDbContext(options);
-        systemCategoryService = new SystemCategoryService(context);
+        _systemCategoryRepository = new SystemCategoryRepository(context);
         
         var systemCategoryId = Guid.Parse("656b9ad3-0e4a-4199-aa35-f38febf68dba");
-        var systemCategoryDb = await systemCategoryService.GetSystemCategoryById(systemCategoryId);
+        var systemCategoryDb = await _systemCategoryRepository.GetSystemCategoryById(systemCategoryId);
         
-        await systemCategoryService.DeleteSystemCategory(systemCategoryDb);
+        await _systemCategoryRepository.DeleteSystemCategory(systemCategoryDb);
         
         var systemCategories = await context.SystemCategories.ToArrayAsync();
         

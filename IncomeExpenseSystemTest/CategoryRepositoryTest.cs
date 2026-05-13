@@ -1,18 +1,19 @@
-using IncomeExpenseSystemDataAccess.DataAccess;
-using IncomeExpenseSystemDataAccess.DataAccess.Servicies;
-using IncomeExpenseSystemDataAccess.Entities;
+using IncomeExpenseSystemDataAccess.DBContext;
+using IncomeExpenseSystemDataAccess.Repositories;
+using IncomeExpenseSystemDomain.Entities;
+using IncomeExpenseSystemDomain.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace IncomeExpenseSystemTest;
 
-public class CategoryServiceTest
+public class CategoryRepositoryTest
 {
     DbContextOptions<IncomeExpenseSystemDbContext> options = new DbContextOptionsBuilder<IncomeExpenseSystemDbContext>()
         .UseMySQL("server=localhost;uid=Daniele;pwd=CT22d03p06;database=IncomeExpenseSystem")
         .Options;
 
     private Category category;
-    private CategoryService categoryService;
+    private ICategoryRepository _categoryRepository;
     
     [Fact]
     public async Task CreateCategory_should_work()
@@ -24,9 +25,9 @@ public class CategoryServiceTest
             "Test",
             Guid.Parse("532b2bfa-87ae-435a-b91b-76297442ac38")
         );
-        categoryService = new CategoryService(context);
+        _categoryRepository = new CategoryRepository(context);
         
-        var categoryDb = await categoryService.CreateCategory(category);
+        var categoryDb = await _categoryRepository.CreateCategory(category);
         
         Assert.Equal("Test", categoryDb.CategoryName);
     }
@@ -35,10 +36,10 @@ public class CategoryServiceTest
     public async Task GetCategoryById_should_work()
     {
         await using var context = new IncomeExpenseSystemDbContext(options);
-        categoryService = new CategoryService(context);
+        _categoryRepository = new CategoryRepository(context);
 
         var categoryId = Guid.Parse("939b9ad3-0e4a-4199-aa35-f38febf68dba");
-        var categoryDb = await categoryService.GetCategoryById(categoryId);
+        var categoryDb = await _categoryRepository.GetCategoryById(categoryId);
         
         Assert.NotNull(categoryDb);
     }
@@ -47,10 +48,10 @@ public class CategoryServiceTest
     public async Task GetCategoriesByUserId_should_work()
     {
         await using var context = new IncomeExpenseSystemDbContext(options);
-        categoryService = new CategoryService(context);
+        _categoryRepository = new CategoryRepository(context);
 
         var userId = Guid.Parse("532b2bfa-87ae-435a-b91b-76297442ac38");
-        var categories = await categoryService.GetCategoriesByUserId(userId);
+        var categories = await _categoryRepository.GetCategoriesByUserId(userId);
         
         Assert.NotNull(categories);
         Assert.Single(categories);
@@ -60,7 +61,7 @@ public class CategoryServiceTest
     public async Task UpdateCategory_should_work()
     {
         await using var context = new IncomeExpenseSystemDbContext(options);
-        categoryService = new CategoryService(context);
+        _categoryRepository = new CategoryRepository(context);
         category = new Category
         (
             Guid.Parse("939b9ad3-0e4a-4199-aa35-f38febf68dba"), 
@@ -68,7 +69,7 @@ public class CategoryServiceTest
             Guid.Parse("532b2bfa-87ae-435a-b91b-76297442ac38")
         );
         
-        var categoryDb = await categoryService.UpdateCategory(category);
+        var categoryDb = await _categoryRepository.UpdateCategory(category);
         
         Assert.Equal("test", categoryDb.CategoryName);
     }
@@ -77,12 +78,12 @@ public class CategoryServiceTest
     public async Task DeleteSystemCategory_should_work()
     {
         await using var context = new IncomeExpenseSystemDbContext(options);
-        categoryService = new CategoryService(context);
+        _categoryRepository = new CategoryRepository(context);
         
         var categoryId = Guid.Parse("939b9ad3-0e4a-4199-aa35-f38febf68dba");
-        var categoryDb = await categoryService.GetCategoryById(categoryId);
+        var categoryDb = await _categoryRepository.GetCategoryById(categoryId);
         
-        await categoryService.DeleteCategory(categoryDb);
+        await _categoryRepository.DeleteCategory(categoryDb);
         
         var categories = await context.Categories.ToArrayAsync();
         
