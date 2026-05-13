@@ -1,4 +1,4 @@
-using IncomeExpenseSystemDataAccess.DataAccess;
+using IncomeExpenseSystemDataAccess.DBContext;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);

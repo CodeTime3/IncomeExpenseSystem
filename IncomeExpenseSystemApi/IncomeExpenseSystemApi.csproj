@@ -17,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\IncomeExpenseSystemApplication\IncomeExpenseSystemApplication.csproj" />
     <ProjectReference Include="..\IncomeExpenseSystemDataAccess\IncomeExpenseSystemDataAccess.csproj" />
   </ItemGroup>
 
