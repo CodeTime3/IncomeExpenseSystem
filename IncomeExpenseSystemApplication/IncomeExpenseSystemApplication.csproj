@@ -12,8 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\IncomeExpenseSystemDataAccess\IncomeExpenseSystemDataAccess.csproj" />
-    <ProjectReference Include="..\IncomeExpenseSystemModels\IncomeExpenseSystemModels.csproj" />
+    <ProjectReference Include="..\IncomeExpenseSystemDomain\IncomeExpenseSystemDomain.csproj" />
   </ItemGroup>
 
 </Project>
