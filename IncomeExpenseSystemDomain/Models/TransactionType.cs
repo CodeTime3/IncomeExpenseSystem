@@ -1,4 +1,4 @@
-namespace IncomeExpenseSystemDataAccess;
+namespace IncomeExpenseSystemDomain.Models;
 
 public enum TransactionType
 {
