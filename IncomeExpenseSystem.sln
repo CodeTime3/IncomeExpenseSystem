@@ -9,9 +9,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IncomeExpenseSystemApi", "I
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IncomeExpenseSystemTest", "IncomeExpenseSystemTest\IncomeExpenseSystemTest.csproj", "{C94EE463-2E8B-4050-A959-E15C279B6AEE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IncomeExpenseSystemService", "IncomeExpenseSystemService\IncomeExpenseSystemService.csproj", "{C0ACF0D9-F197-4BB2-B0F8-730258C0F01C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IncomeExpenseSystemApplication", "IncomeExpenseSystemApplication\IncomeExpenseSystemApplication.csproj", "{C0ACF0D9-F197-4BB2-B0F8-730258C0F01C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IncomeExpenseSystemModels", "IncomeExpenseSystemModels\IncomeExpenseSystemModels.csproj", "{A6920292-1791-4B55-BFB4-5D1E83469A93}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IncomeExpenseSystemDomain", "IncomeExpenseSystemDomain\IncomeExpenseSystemDomain.csproj", "{A6920292-1791-4B55-BFB4-5D1E83469A93}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
