@@ -1,4 +1,4 @@
-namespace IncomeExpenseSystemDataAccess.Entities;
+namespace IncomeExpenseSystemDomain.Entities;
 
 public class EmailVerification
 {
