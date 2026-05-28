@@ -1,5 +1,6 @@
 using IncomeExpenseSystemDataAccess.DBContext;
 using IncomeExpenseSystemDataAccess.DBContext.Configuration;
+using IncomeExpenseSystemDomain;
 using IncomeExpenseSystemDomain.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,6 +8,8 @@ namespace IncomeExpenseSystemDataAccess.DBContext;
 
 public class IncomeExpenseSystemDbContext : DbContext
 {
+    private IMyDbContext _myDbContextImplementation;
+
     public IncomeExpenseSystemDbContext(DbContextOptions<IncomeExpenseSystemDbContext> options) : base(options)
     {
     }
