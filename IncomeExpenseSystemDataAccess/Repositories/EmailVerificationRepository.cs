@@ -22,9 +22,11 @@ public class EmailVerificationRepository : IEmailVerificationRepository
         return emailVerification;
     }
 
-    public async Task<EmailVerification> GetEmailVerificationById(Guid emailVerificationId)
+    public async Task<EmailVerification?> GetEmailVerificationByToken(string token)
     {
-        var emailVerification = await _dbContext.EmailVerifications.FindAsync(emailVerificationId);
+        var emailVerification = await _dbContext.EmailVerifications
+            .Where(x => x.EmailVerificationToken.Equals(token))
+            .FirstOrDefaultAsync();
         
         return emailVerification;
     }

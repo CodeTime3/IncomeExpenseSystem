@@ -22,18 +22,16 @@ public class UserRepository : IUserRepository
         return user;
     }
 
-    public async Task<User[]> GetAllUsers()
-    {
-        var categories = await _dbContext.Users.ToArrayAsync();
-        
-        return categories;
-    }
-
-    public async Task<User> GetUserById(Guid userId)
+    public async Task<User?> GetUserById(Guid userId)
     {
         return await _dbContext.Users.FindAsync(userId);
     }
-    
+
+    public async Task<User?> GetUserByMail(string mail)
+    {
+        return await _dbContext.Users.Where(u => u.UserMail.Equals(mail)).FirstOrDefaultAsync();
+    }
+
     public async Task<User> UpdateUser(User user)
     {
         _dbContext.Update(user);
