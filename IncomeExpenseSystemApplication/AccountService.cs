@@ -12,20 +12,17 @@ public class AccountService
     private PasswordHasher<User> _pwdHasher = new();
     private IUserRepository _userRepository;
     private IEmailVerificationRepository _emailVerificationRepository;
-    private JwtService _jwtService;
-    private JwtModel _jwtModel;
+    private IJwtService _jwtService;
     private SendEmailConfirmService _sendEmailConfirmService;
     private EmailModel _emailModel;
     private IMyDbContext _dbContext;
     
-    public AccountService(IUserRepository userRepository, IEmailVerificationRepository emailVerificationRepository, 
-        JwtService jwtService, JwtModel jwtModel, SendEmailConfirmService sendEmailConfirmService, 
-        EmailModel emailModel, IMyDbContext dbContext)
+    public AccountService(IUserRepository userRepository, IEmailVerificationRepository emailVerificationRepository, IJwtService jwtService, 
+        SendEmailConfirmService sendEmailConfirmService, EmailModel emailModel, IMyDbContext dbContext)
     {
         _userRepository = userRepository;
         _emailVerificationRepository = emailVerificationRepository;
         _jwtService = jwtService;
-        _jwtModel = jwtModel;
         _sendEmailConfirmService = sendEmailConfirmService;
         _emailModel = emailModel;
         _dbContext = dbContext;
@@ -37,7 +34,7 @@ public class AccountService
 
         if (user is not null)
         {
-            return Result.OnFailure("That email is already used");
+            return Result.OnFailure(new Error(ErrorType.BadRequest ,"That email is already used"));
         }
         
         var newUser = new User
@@ -64,12 +61,12 @@ public class AccountService
             _sendEmailConfirmService.SendEmail(_emailModel, createdUser.UserMail, token);
 
             await transaction.CommitAsync();
-            return Result.OnSuccess("Check your email");
+            return Result.OnSuccess();
         }
         catch (Exception e)
         {
             await transaction.RollbackAsync();
-            return Result.OnFailure(e.Message);
+            return Result.OnFailure(new Error(ErrorType.BadRequest, "Error sign up"));
         }
     }
 
@@ -77,24 +74,24 @@ public class AccountService
     {
         if (token.IsNullOrEmpty())
         {
-            return Result<string>.OnFailure("Token not found", string.Empty);
+            return Result<string>.OnFailure(new Error(ErrorType.NotFound, "Token not found"));
         }
 
         var emailVerification = await _emailVerificationRepository.GetEmailVerificationByToken(token);
 
         if (emailVerification is null)
         {
-            return Result<string>.OnFailure("Email not found", string.Empty);
-        }
-
-        if (emailVerification.EmailVerificationExpiresAt >= DateTime.Now)
-        {
-            return Result<string>.OnFailure("Token expired. If you signed up before click here to receive a new verify email", string.Empty);
+            return Result<string>.OnFailure(new Error(ErrorType.NotFound, "Email not found"));
         }
 
         if (emailVerification.EmailVerifiedAt is not null)
         {
-            return Result<string>.OnFailure("Email already verified", string.Empty);
+            return Result<string>.OnFailure(new Error(ErrorType.Conflict, "Email already verified"));
+        }
+        
+        if (emailVerification.EmailVerificationExpiresAt <= DateTime.Now)
+        {
+            return Result<string>.OnFailure(new Error(ErrorType.BadRequest ,"Token expired. If you signed up before click here to receive a new verify email"));
         }
 
         emailVerification.EmailVerifiedAt = DateTime.Now;
@@ -104,9 +101,9 @@ public class AccountService
         user.UserMailVerifiedAt = DateTime.Now;
         await _userRepository.UpdateUser(user);
         
-        var jwt = _jwtService.CreateJwt(_jwtModel, user.UserId);
+        var jwt = _jwtService.CreateJwt(user.UserId);
         
-        return Result<string>.OnSuccess(jwt, "Email verified");
+        return Result<string>.OnSuccess(jwt);
     }
 
     public async Task<Result> ResendEmail(AuthModel authModel)
@@ -115,12 +112,12 @@ public class AccountService
 
         if (user is null)
         {
-            return Result.OnFailure("Email not found");
+            return Result.OnFailure(new Error(ErrorType.NotFound, "Email not found"));
         }
 
         if (user.UserMailVerifiedAt is not null)
         {
-            return Result.OnFailure("Email already verified");
+            return Result.OnFailure(new Error(ErrorType.Conflict, "Email already verified"));
         }
         
         var token = Guid.NewGuid().ToString();
@@ -134,7 +131,7 @@ public class AccountService
         await _emailVerificationRepository.CreateEmailVerification(email);
         _sendEmailConfirmService.SendEmail(_emailModel, user.UserMail, token);
         
-        return Result.OnSuccess("Check your email");
+        return Result.OnSuccess();
     }
 
     public async Task<Result<string>> SignIn(AuthModel authModel)
@@ -143,22 +140,22 @@ public class AccountService
 
         if (user is null)
         {
-            return Result<string>.OnFailure("Email not found", string.Empty);
+            return Result<string>.OnFailure(new Error(ErrorType.NotFound, "Email not found"));
         }
 
         if (user.UserMailVerifiedAt is null)
         {
-            return Result<string>.OnFailure("Email isn't verified", string.Empty);
+            return Result<string>.OnFailure(new Error(ErrorType.Unauthorized, "Email isn't verified"));
         }
 
         var hash = _pwdHasher.VerifyHashedPassword(user, user.UserPassword, authModel.Password);
 
-        if (!user.UserMail.Equals(authModel.Mail) || hash is PasswordVerificationResult.Success)
+        if (hash is not PasswordVerificationResult.Success)
         {
-            return Result<string>.OnFailure("Incorrect email or password", string.Empty);
+            return Result<string>.OnFailure(new Error(ErrorType.Unauthorized, "Incorrect email or password"));
         }
         
-        var jwt = _jwtService.CreateJwt(_jwtModel, user.UserId);
+        var jwt = _jwtService.CreateJwt(user.UserId);
         
         return Result<string>.OnSuccess(jwt);
     }
@@ -169,30 +166,30 @@ public class AccountService
 
         if (user is null)
         {
-            return Result.OnFailure("Email not found");
+            return Result.OnFailure(new Error(ErrorType.NotFound, "Email not found"));
         }
         
         if (user.UserMailVerifiedAt is null)
         {
-            return Result.OnFailure("Email isn't verified");
+            return Result.OnFailure(new Error(ErrorType.Unauthorized, "Email isn't verified"));
         }
 
         user.UserPassword = _pwdHasher.HashPassword(user, model.NewPassword);
         await _userRepository.UpdateUser(user);
         
-        return Result.OnSuccess("Check your email");
+        return Result.OnSuccess();
     }
 
     public async Task<Result> DeleteAccount(DeleteAccountModel model)
-    {
+    {//TODO: aggiungere delete su emailverification tramite id user
         var user = await _userRepository.GetUserByMail(model.Email);
         
         if (user is null)
         {
-            return Result.OnFailure("Email not found");
+            return Result.OnFailure(new Error(ErrorType.NotFound, "Email not found"));
         }
         
         await _userRepository.DeleteUser(user);
-        return Result.OnSuccess("Account deleted");
+        return Result.OnSuccess();
     }
 }
