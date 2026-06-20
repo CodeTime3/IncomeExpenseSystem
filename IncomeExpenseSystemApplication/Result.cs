@@ -1,33 +1,41 @@
-using System.Runtime.CompilerServices;
-
 namespace IncomeExpenseSystemApplication;
 
 public class Result
 {
     public bool IsSuccess { get; private set; }
-    public string Message { get; private set; }
+    public Error? Error { get; private set; }
 
-    public Result(bool isSuccess, string message)
+    public Result(bool isSuccess, Error? error)
     {
         IsSuccess = isSuccess;
-        Message = message;
+        Error = error;
     }
     
-    public static Result OnSuccess(string successMessage = "") => new (true, successMessage);
+    public static Result OnSuccess() => new (true, null);
     
-    public static Result OnFailure(string errorMessage) => new (false, errorMessage);
+    public static Result OnFailure(Error error) => new (false, error);
 }
 
 public class Result<T> : Result
 {
-    public Result(bool isSuccess, string message, T value) : base(isSuccess, message)
+    public Result(bool isSuccess, Error? error, T value) : base(isSuccess, error)
     {
         Value = value;
     }
 
     public T? Value { get; private set; }
     
-    public new static Result<T> OnSuccess(T value, string successMessage = "") => new (true, successMessage, value);
+    public static Result<T> OnSuccess(T value) => new (true, null, value);
     
-    public new static Result<T> OnFailure(string errorMessage, T value) => new (true, errorMessage, value);
+    public new static Result<T> OnFailure(Error error) => new (false, error, default);
+
+    public Result<TResult> MapSuccess<TResult>(Func<T, Result<TResult>> map)
+    {
+        if (IsSuccess)
+        {
+            return map(Value);
+        }
+
+        return Result<TResult>.OnFailure(Error);
+    }
 }
