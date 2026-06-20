@@ -5,4 +5,11 @@ public class JwtModel
     public string Token { get; set; }
     public string Issuer { get; set; }
     public string Audience { get; set; }
+
+    public JwtModel(string token, string issuer, string audience)
+    {
+        Token = token;
+        Issuer = issuer;
+        Audience = audience;
+    }
 }
