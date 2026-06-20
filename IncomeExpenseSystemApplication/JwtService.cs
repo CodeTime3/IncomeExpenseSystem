@@ -6,22 +6,29 @@ using IncomeExpenseSystemDomain.Models;
 
 namespace IncomeExpenseSystemApplication;
 
-public class JwtService
+public class JwtService : IJwtService
 {
-    public string CreateJwt(JwtModel model, Guid userId)
+    private JwtModel _model;
+
+    public JwtService(JwtModel model)
+    {
+        _model = model;
+    }
+    
+    public string CreateJwt(Guid userId)
     {
         var claims = new List<Claim>
         {
             new (ClaimTypes.NameIdentifier, userId.ToString())
         };
         
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(model.Token));
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_model.Token));
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha512);
 
         var tokenDescriptor = new JwtSecurityToken
         (
-            issuer: model.Issuer,
-            audience: model.Audience,
+            issuer: _model.Issuer,
+            audience: _model.Audience,
             claims: claims,
             expires: DateTime.UtcNow.AddDays(7),
             signingCredentials: credentials
