@@ -9,4 +9,5 @@ public interface IEmailVerificationRepository
     Task<List<EmailVerification>> GetEmailVerificationsByUserId(Guid userId);
     Task<EmailVerification> UpdateEmailVerification(EmailVerification emailVerification);
     Task DeleteEmailVerification(EmailVerification emailVerification);
+    Task DeleteAllEmailVerificationByUserId(Guid userId);
 }

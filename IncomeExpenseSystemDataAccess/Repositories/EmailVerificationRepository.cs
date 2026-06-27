@@ -53,4 +53,14 @@ public class EmailVerificationRepository : IEmailVerificationRepository
         _dbContext.Remove(emailVerification);
         await _dbContext.SaveChangesAsync();   
     }
+
+    public async Task DeleteAllEmailVerificationByUserId(Guid userId)
+    {
+        var emailVerifications = await _dbContext.EmailVerifications
+            .Where(x => x.UserId == userId)
+            .ToListAsync();
+        
+        _dbContext.RemoveRange(emailVerifications);
+        await _dbContext.SaveChangesAsync();
+    }
 }
