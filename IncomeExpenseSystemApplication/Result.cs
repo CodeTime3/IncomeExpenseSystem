@@ -2,40 +2,42 @@ namespace IncomeExpenseSystemApplication;
 
 public class Result
 {
-    public bool IsSuccess { get; private set; }
+    protected bool IsSuccess { get; private set; }
     public Error? Error { get; private set; }
 
-    public Result(bool isSuccess, Error? error)
+    public Result(Error error)
     {
-        IsSuccess = isSuccess;
         Error = error;
+        IsSuccess = false;
     }
-    
-    public static Result OnSuccess() => new (true, null);
-    
-    public static Result OnFailure(Error error) => new (false, error);
+
+    public Result()
+    {
+        IsSuccess = true;
+    }
 }
 
 public class Result<T> : Result
 {
-    public Result(bool isSuccess, Error? error, T value) : base(isSuccess, error)
+    public T? Value { get; private set; }
+    
+    public Result(T value) : base()
     {
         Value = value;
     }
-
-    public T? Value { get; private set; }
     
-    public static Result<T> OnSuccess(T value) => new (true, null, value);
-    
-    public new static Result<T> OnFailure(Error error) => new (false, error, default);
-
-    public Result<TResult> MapSuccess<TResult>(Func<T, Result<TResult>> map)
+    public Result(Error error) : base(error)
     {
-        if (IsSuccess)
-        {
-            return map(Value);
-        }
+        Value = default(T);
+    }
 
-        return Result<TResult>.OnFailure(Error);
+    public Result<TValue> MapSuccess<TValue>(Func<T, TValue> map)
+    {
+        return IsSuccess ? new Result<TValue>(map(Value)) : new Result<TValue>(Error);
+    }
+
+    public TReturn Match<TReturn>(Func<T, TReturn> onSuccess, Func<Error, TReturn> onFailure)
+    {
+        return IsSuccess ? onSuccess(Value) : onFailure(Error);
     }
 }

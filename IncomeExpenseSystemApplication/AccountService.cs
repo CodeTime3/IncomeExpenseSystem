@@ -34,7 +34,7 @@ public class AccountService
 
         if (user is not null)
         {
-            return Result.OnFailure(new Error(ErrorType.BadRequest ,"That email is already used"));
+            return new Result(new Error(ErrorType.BadRequest ,"That email is already used"));
         }
         
         var newUser = new User
@@ -61,12 +61,12 @@ public class AccountService
             _sendEmailConfirmService.SendEmail(_emailModel, createdUser.UserMail, token);
 
             await transaction.CommitAsync();
-            return Result.OnSuccess();
+            return new Result();
         }
         catch (Exception e)
         {
             await transaction.RollbackAsync();
-            return Result.OnFailure(new Error(ErrorType.BadRequest, "Error sign up"));
+            return new Result(new Error(ErrorType.BadRequest, "Error sign up"));
         }
     }
 
@@ -74,24 +74,24 @@ public class AccountService
     {
         if (token.IsNullOrEmpty())
         {
-            return Result<string>.OnFailure(new Error(ErrorType.NotFound, "Token not found"));
+            return new Result<string>(new Error(ErrorType.NotFound, "Token not found"));
         }
 
         var emailVerification = await _emailVerificationRepository.GetEmailVerificationByToken(token);
 
         if (emailVerification is null)
         {
-            return Result<string>.OnFailure(new Error(ErrorType.NotFound, "Email not found"));
+            return new Result<string>(new Error(ErrorType.NotFound, "Email not found"));
         }
 
         if (emailVerification.EmailVerifiedAt is not null)
         {
-            return Result<string>.OnFailure(new Error(ErrorType.Conflict, "Email already verified"));
+            return new Result<string>(new Error(ErrorType.Conflict, "Email already verified"));
         }
         
         if (emailVerification.EmailVerificationExpiresAt <= DateTime.Now)
         {
-            return Result<string>.OnFailure(new Error(ErrorType.BadRequest ,"Token expired. If you signed up before click here to receive a new verify email"));
+            return new Result<string>(new Error(ErrorType.BadRequest ,"Token expired. If you signed up before click here to receive a new verify email"));
         }
 
         emailVerification.EmailVerifiedAt = DateTime.Now;
@@ -103,7 +103,7 @@ public class AccountService
         
         var jwt = _jwtService.CreateJwt(user.UserId);
         
-        return Result<string>.OnSuccess(jwt);
+        return new Result<string>(jwt);
     }
 
     public async Task<Result> ResendEmail(AuthModel authModel)
@@ -112,12 +112,12 @@ public class AccountService
 
         if (user is null)
         {
-            return Result.OnFailure(new Error(ErrorType.NotFound, "Email not found"));
+            return new Result(new Error(ErrorType.NotFound, "Email not found"));
         }
 
         if (user.UserMailVerifiedAt is not null)
         {
-            return Result.OnFailure(new Error(ErrorType.Conflict, "Email already verified"));
+            return new Result(new Error(ErrorType.Conflict, "Email already verified"));
         }
         
         var token = Guid.NewGuid().ToString();
@@ -131,7 +131,7 @@ public class AccountService
         await _emailVerificationRepository.CreateEmailVerification(email);
         _sendEmailConfirmService.SendEmail(_emailModel, user.UserMail, token);
         
-        return Result.OnSuccess();
+        return new Result();
     }
 
     public async Task<Result<string>> SignIn(AuthModel authModel)
@@ -140,24 +140,24 @@ public class AccountService
 
         if (user is null)
         {
-            return Result<string>.OnFailure(new Error(ErrorType.NotFound, "Email not found"));
+            return new Result<string>(new Error(ErrorType.NotFound, "Email not found"));
         }
 
         if (user.UserMailVerifiedAt is null)
         {
-            return Result<string>.OnFailure(new Error(ErrorType.Unauthorized, "Email isn't verified"));
+            return new Result<string>(new Error(ErrorType.Unauthorized, "Email isn't verified"));
         }
 
         var hash = _pwdHasher.VerifyHashedPassword(user, user.UserPassword, authModel.Password);
 
         if (hash is not PasswordVerificationResult.Success)
         {
-            return Result<string>.OnFailure(new Error(ErrorType.Unauthorized, "Incorrect email or password"));
+            return new Result<string>(new Error(ErrorType.Unauthorized, "Incorrect email or password"));
         }
         
         var jwt = _jwtService.CreateJwt(user.UserId);
         
-        return Result<string>.OnSuccess(jwt);
+        return new Result<string>(jwt);
     }
 
     public async Task<Result> ResetPassword(ResetPasswordModel model)
@@ -166,30 +166,31 @@ public class AccountService
 
         if (user is null)
         {
-            return Result.OnFailure(new Error(ErrorType.NotFound, "Email not found"));
+            return new Result(new Error(ErrorType.NotFound, "Email not found"));
         }
         
         if (user.UserMailVerifiedAt is null)
         {
-            return Result.OnFailure(new Error(ErrorType.Unauthorized, "Email isn't verified"));
+            return new Result(new Error(ErrorType.Unauthorized, "Email isn't verified"));
         }
 
         user.UserPassword = _pwdHasher.HashPassword(user, model.NewPassword);
         await _userRepository.UpdateUser(user);
         
-        return Result.OnSuccess();
+        return new Result();
     }
 
     public async Task<Result> DeleteAccount(DeleteAccountModel model)
-    {//TODO: aggiungere delete su emailverification tramite id user
+    {
         var user = await _userRepository.GetUserByMail(model.Email);
         
         if (user is null)
         {
-            return Result.OnFailure(new Error(ErrorType.NotFound, "Email not found"));
+            return new Result(new Error(ErrorType.NotFound, "Email not found"));
         }
         
+        await _emailVerificationRepository.DeleteAllEmailVerificationByUserId(user.UserId);
         await _userRepository.DeleteUser(user);
-        return Result.OnSuccess();
+        return new Result();
     }
 }
